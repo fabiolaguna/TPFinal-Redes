@@ -1,4 +1,4 @@
-package edu.utn;
+package edu.utn.servers;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,7 +10,7 @@ import java.net.Socket;
  * Hello world!
  *
  */
-public class Server
+public class ServerMain
 {
     public static void main( String[] args )
     {
@@ -22,7 +22,10 @@ public class Server
 
         try{
             server = new ServerSocket(HOST);
-            System.out.println("Server initialized");
+            System.out.println("ServerMain initialized");
+
+            inputStream = new DataInputStream(sc.getInputStream());
+            outputStream = new DataOutputStream(sc.getOutputStream());
 
             while (true){
                 sc = server.accept();
