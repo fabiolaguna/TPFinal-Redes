@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,28 +20,36 @@ public class Server {
 
     private final int PORT = 3000;
 
+    public synchronized void start(){
 
-    public void startAll(){
         try {
             server = new ServerSocket(PORT);
-            System.out.println("Servidor iniciado");
+            System.out.println("Server initialized");
+            System.out.println();
+            sc = server.accept();
+            in = new DataInputStream(sc.getInputStream());
+            out = new DataOutputStream(sc.getOutputStream());
+            String inMessage = "";
 
             while(true){
-                sc = server.accept();
-                in = new DataInputStream(sc.getInputStream());
-                out = new DataOutputStream(sc.getOutputStream());
 
-                String message = in.readUTF();
+                inMessage = in.readUTF();
+                System.out.println("Client message: " + inMessage);
+                System.out.println();
 
-                System.out.println(message);
+                String outMessage = "The server has received the message: " + inMessage;
+                out.writeUTF(outMessage);
+                System.out.println(outMessage);
+                System.out.println();
 
-                out.writeUTF("Hola mundo desde el servidor");
-
-                sc.close();
-                System.out.println("Cliente desconectado");
+                inMessage = in.readUTF();
+                if(inMessage.equalsIgnoreCase("x")){
+                    System.out.println("Client disconnected");
+                    sc.close();
+                }
             }
         } catch (IOException e) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, "The server has failed", e);
         }
     }
 }
