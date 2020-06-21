@@ -4,7 +4,7 @@ public class ClientMain
 {
     public static void main( String[] args )
     {
-        Thread thread = new Thread(new Client());
-        thread.start();
+        Client client = new Client();
+        client.start();
     }
 }
